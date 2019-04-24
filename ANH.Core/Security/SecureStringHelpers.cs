@@ -9,9 +9,14 @@ namespace ANH.Core
     /// </summary>
     public static class SecureStringHelpers
     {
-        public static string Unsecure(this SecureString  secureString)
+        /// <summary>
+        /// Unsecures a <see cref="SecureString"/> to plain text
+        /// </summary>
+        /// <param name="secureString">The secure string</param>
+        /// <returns></returns>
+        public static string Unsecure(this SecureString secureString)
         {
-            // Maske sure we have a secure string
+            // Make sure we have a secure string
             if (secureString == null)
                 return string.Empty;
 
@@ -29,7 +34,6 @@ namespace ANH.Core
                 // Clean up any memory allocation
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
-
         }
     }
 }

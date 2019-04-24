@@ -16,6 +16,5 @@
         /// A file icon
         /// </summary>
         File = 2,
-
     }
 }
