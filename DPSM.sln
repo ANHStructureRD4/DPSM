@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANH.DPSM", "ANH.DPSM\ANH.DP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANH.Core", "ANH.Core\ANH.Core.csproj", "{29C67F46-F35E-4A4A-822D-660DF04551A5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ANH.Database", "ANH.Database\ANH.Database.csproj", "{C0F9D090-D511-4046-A6C1-3C50E7461328}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ANH.Web.Server", "ANH.Web.Server\ANH.Web.Server.csproj", "{94C2F1B4-4100-493A-84DE-3D536EFA4054}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{29C67F46-F35E-4A4A-822D-660DF04551A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29C67F46-F35E-4A4A-822D-660DF04551A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29C67F46-F35E-4A4A-822D-660DF04551A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0F9D090-D511-4046-A6C1-3C50E7461328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0F9D090-D511-4046-A6C1-3C50E7461328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0F9D090-D511-4046-A6C1-3C50E7461328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0F9D090-D511-4046-A6C1-3C50E7461328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94C2F1B4-4100-493A-84DE-3D536EFA4054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94C2F1B4-4100-493A-84DE-3D536EFA4054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94C2F1B4-4100-493A-84DE-3D536EFA4054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94C2F1B4-4100-493A-84DE-3D536EFA4054}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
