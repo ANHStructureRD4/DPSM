@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Match the label width of all text entry controls inside this panel

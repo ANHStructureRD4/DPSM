@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// The PanelChild margin property for creating a <see cref="Panel"/> that never shows navigation

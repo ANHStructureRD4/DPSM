@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// The View Model for the custom flat window

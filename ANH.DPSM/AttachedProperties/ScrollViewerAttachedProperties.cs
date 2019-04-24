@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Scroll an items control to the bottom when the data context changes

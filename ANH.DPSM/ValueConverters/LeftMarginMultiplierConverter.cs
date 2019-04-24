@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Converts the <see cref="TreeViewItem"/> to an actual view/page

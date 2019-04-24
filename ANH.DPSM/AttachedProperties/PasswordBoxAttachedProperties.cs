@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// The MonitorPassword attached property for a <see cref="PasswordBox"/>

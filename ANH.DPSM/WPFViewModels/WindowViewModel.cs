@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// The View Model for the custom flat window
@@ -43,12 +43,12 @@ namespace ANH.GCS
         /// <summary>
         /// The smallest width the window can go to
         /// </summary>
-        public double WindowMinimumWidth { get; set; } = 1040;
+        public double WindowMinimumWidth { get; set; } = 760;
 
         /// <summary>
         /// The smallest height the window can go to
         /// </summary>
-        public double WindowMinimumHeight { get; set; } = 500;
+        public double WindowMinimumHeight { get; set; } = 480;
 
         /// <summary>
         /// True if the window should be borderless because it is docked or maximized

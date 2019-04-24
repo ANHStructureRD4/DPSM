@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Helpers to animate pages in specific ways
@@ -18,10 +18,10 @@ namespace ANH.GCS
         /// <returns></returns>
         public static async Task SlideAndFadeInFromRightAsync(this Page page, float seconds)
         {
-            // Create the stroyboard
+            // Create the storyboard
             var sb = new Storyboard();
 
-            // Add Slide from right animation
+            // Add slide from right animation
             sb.AddSlideFromRight(seconds, page.WindowWidth);
 
             // Add fade in animation
@@ -45,13 +45,13 @@ namespace ANH.GCS
         /// <returns></returns>
         public static async Task SlideAndFadeOutToLeftAsync(this Page page, float seconds)
         {
-            // Create the stroyboard
+            // Create the storyboard
             var sb = new Storyboard();
 
-            // Add Slide to left animation
+            // Add slide from right animation
             sb.AddSlideToLeft(seconds, page.WindowWidth);
 
-            // Add fade out animation
+            // Add fade in animation
             sb.AddFadeOut(seconds);
 
             // Start animating

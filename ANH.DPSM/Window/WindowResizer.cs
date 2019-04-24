@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// The dock position of the window
@@ -46,6 +46,7 @@ namespace ANH.GCS
         BottomRight = 7,
     }
 
+
     /// <summary>
     /// Fixes the issue with Windows of Style <see cref="WindowStyle.None"/> covering the taskbar
     /// </summary>
@@ -83,9 +84,14 @@ namespace ANH.GCS
         /// </summary>
         private WindowDockPosition mLastDock = WindowDockPosition.Undocked;
 
+        /// <summary>
+        /// A flag indicating if the window is currently being moved/dragged
+        /// </summary>
+        private bool mBeingMoved = false;
+
         #endregion
 
-        #region Dll Imports
+        #region DLL Imports
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
@@ -97,6 +103,9 @@ namespace ANH.GCS
         [DllImport("user32.dll", SetLastError = true)]
         static extern IntPtr MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
 
+        [DllImport("user32.dll")]
+        static extern IntPtr MonitorFromWindow(IntPtr hwnd, MonitorOptions dwFlags);
+
         #endregion
 
         #region Public Events
@@ -105,6 +114,11 @@ namespace ANH.GCS
         /// Called when the window dock position changes
         /// </summary>
         public event Action<WindowDockPosition> WindowDockChanged = (dock) => { };
+
+        /// <summary>
+        /// Called when the window starts being moved/dragged
+        /// </summary>
+        public event Action WindowStartedMove = () => { };
 
         /// <summary>
         /// Called when the window has been moved/dragged and then finished
@@ -157,25 +171,6 @@ namespace ANH.GCS
         #endregion
 
         #region Initialize
-
-        ///// <summary>
-        ///// Gets the transform object used to convert WPF sizes to screen pixels
-        ///// </summary>
-        //private void GetTransform()
-        //{
-        //    // Get the visual source
-        //    var source = PresentationSource.FromVisual(mWindow);
-
-        //    // Reset the transform to default
-        //    mTransformToDevice = default(Matrix);
-
-        //    // If we cannot get the source, ignore
-        //    if (source == null)
-        //        return;
-
-        //    // Otherwise, get the new transform object
-        //    mTransformToDevice = source.CompositionTarget.TransformToDevice;
-        //}
 
         /// <summary>
         /// Initialize and hook into the windows message pump
@@ -304,8 +299,15 @@ namespace ANH.GCS
                     handled = true;
                     break;
 
+                // Once the window starts being moved
+                case 0x0231: // WM_ENTERSIZEMOVE
+                    mBeingMoved = true;
+                    WindowStartedMove();
+                    break;
+
                 // Once the window has finished being moved
                 case 0x0232: // WM_EXITSIZEMOVE
+                    mBeingMoved = false;
                     WindowFinishedMove();
                     break;
             }
@@ -324,10 +326,16 @@ namespace ANH.GCS
         private void WmGetMinMaxInfo(System.IntPtr hwnd, System.IntPtr lParam)
         {
             // Get the point position to determine what screen we are on
-            GetCursorPos(out POINT lMousePosition);
+            GetCursorPos(out var lMousePosition);
 
             // Now get the current screen
-            var lCurrentScreen = MonitorFromPoint(lMousePosition, MonitorOptions.MONITOR_DEFAULTTONEAREST);
+            var lCurrentScreen = mBeingMoved ?
+                // If being dragged get it from the mouse position
+                MonitorFromPoint(lMousePosition, MonitorOptions.MONITOR_DEFAULTTONULL) :
+                // Otherwise get it from the window position (for example being moved via Win + Arrow)
+                // in case the mouse is on another monitor
+                MonitorFromWindow(hwnd, MonitorOptions.MONITOR_DEFAULTTONULL);
+
             var lPrimaryScreen = MonitorFromPoint(new POINT(0, 0), MonitorOptions.MONITOR_DEFAULTTOPRIMARY);
 
             // Try and get the current screen information
@@ -376,6 +384,11 @@ namespace ANH.GCS
                 //         window width on a secondary monitor if larger than the
                 //         primary then goes too large
                 //
+                //          lMmi.PointMaxPosition.X = 0;
+                //          lMmi.PointMaxPosition.Y = 0;
+                //          lMmi.PointMaxSize.X = lCurrentScreenInfo.RCMonitor.Right - lCurrentScreenInfo.RCMonitor.Left;
+                //          lMmi.PointMaxSize.Y = lCurrentScreenInfo.RCMonitor.Bottom - lCurrentScreenInfo.RCMonitor.Top;
+                //
                 //         Instead we now just add a margin to the window itself
                 //         to compensate when maximized
                 // 
@@ -383,17 +396,8 @@ namespace ANH.GCS
                 // NOTE: rcMonitor is the monitor size
                 //       rcWork is the available screen size (so the area inside the task bar start menu for example)
 
-                // Size size limits (used by Windows when maximized)
+                // Size limits (used by Windows when maximized)
                 // relative to 0,0 being the current screens top-left corner
-                //
-                //  - Position
-                //lMmi.PointMaxPosition.X = currentX;
-                //lMmi.PointMaxPosition.Y = currentY;
-
-                //
-                // - Size
-                //lMmi.PointMaxSize.X = currentWidth;
-                //lMmi.PointMaxSize.Y = currentHeight;
 
                 // Set to primary monitor size
                 lMmi.PointMaxPosition.X = lPrimaryScreenInfo.RCMonitor.Left;
@@ -415,8 +419,8 @@ namespace ANH.GCS
 
             // Get margin around window
             CurrentMonitorMargin = new Thickness(
-                (lCurrentScreenInfo.RCMonitor.Left - lCurrentScreenInfo.RCWork.Left) / mMonitorDpi.Value.DpiScaleX,
-                (lCurrentScreenInfo.RCMonitor.Top - lCurrentScreenInfo.RCWork.Top) / mMonitorDpi.Value.DpiScaleY,
+                (lCurrentScreenInfo.RCWork.Left - lCurrentScreenInfo.RCMonitor.Left) / mMonitorDpi.Value.DpiScaleX,
+                (lCurrentScreenInfo.RCWork.Top - lCurrentScreenInfo.RCMonitor.Top) / mMonitorDpi.Value.DpiScaleY,
                 (lCurrentScreenInfo.RCMonitor.Right - lCurrentScreenInfo.RCWork.Right) / mMonitorDpi.Value.DpiScaleX,
                 (lCurrentScreenInfo.RCMonitor.Bottom - lCurrentScreenInfo.RCWork.Bottom) / mMonitorDpi.Value.DpiScaleY
                 );
@@ -432,7 +436,7 @@ namespace ANH.GCS
         public Point GetCursorPosition()
         {
             // Get mouse position
-            GetCursorPos(out POINT lMousePosition);
+            GetCursorPos(out var lMousePosition);
 
             // Apply DPI scaling
             return new Point(lMousePosition.X / mMonitorDpi.Value.DpiScaleX, lMousePosition.Y / mMonitorDpi.Value.DpiScaleY);
@@ -441,7 +445,7 @@ namespace ANH.GCS
 
     #region DLL Helper Structures
 
-    enum MonitorOptions : uint
+    public enum MonitorOptions : uint
     {
         MONITOR_DEFAULTTONULL = 0x00000000,
         MONITOR_DEFAULTTOPRIMARY = 0x00000001,
@@ -452,21 +456,21 @@ namespace ANH.GCS
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     public class MONITORINFO
     {
-        #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles
         public int CBSize = Marshal.SizeOf(typeof(MONITORINFO));
         public Rectangle RCMonitor = new Rectangle();
         public Rectangle RCWork = new Rectangle();
         public int DWFlags = 0;
-        #pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006 // Naming Styles
     }
 
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Rectangle
     {
-        #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles
         public int Left, Top, Right, Bottom;
-        #pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006 // Naming Styles
 
         public Rectangle(int left, int top, int right, int bottom)
         {
@@ -480,13 +484,13 @@ namespace ANH.GCS
     [StructLayout(LayoutKind.Sequential)]
     public struct MINMAXINFO
     {
-        #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles
         public POINT PointReserved;
         public POINT PointMaxSize;
         public POINT PointMaxPosition;
         public POINT PointMinTrackSize;
         public POINT PointMaxTrackSize;
-        #pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006 // Naming Styles
     };
 
     [StructLayout(LayoutKind.Sequential)]
@@ -495,16 +499,16 @@ namespace ANH.GCS
         /// <summary>
         /// x coordinate of point.
         /// </summary>
-        #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles
         public int X;
-        #pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// y coordinate of point.
         /// </summary>
-        #pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE1006 // Naming Styles
         public int Y;
-        #pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// Construct a point of coordinates (x,y).

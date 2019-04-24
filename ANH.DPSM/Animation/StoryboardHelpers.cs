@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Media.Animation;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
-    /// Animation helpers for <see cref="Storyboard"/>
+    /// Animation helpers for <see cref="StoryBoard"/>
     /// </summary>
     public static class StoryboardHelpers
     {
@@ -240,15 +240,18 @@ namespace ANH.GCS
         /// </summary>
         /// <param name="storyboard">The storyboard to add the animation to</param>
         /// <param name="seconds">The time the animation will take</param>
-        public static void AddFadeIn(this Storyboard storyboard, float seconds)
+        public static void AddFadeIn(this Storyboard storyboard, float seconds, bool from = false)
         {
             // Create the margin animate from right 
             var animation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(seconds)),
-                From = 0,
                 To = 1,
             };
+
+            // Animate from if requested
+            if (from)
+                animation.From = 0;
 
             // Set the target property name
             Storyboard.SetTargetProperty(animation, new PropertyPath("Opacity"));
@@ -268,7 +271,6 @@ namespace ANH.GCS
             var animation = new DoubleAnimation
             {
                 Duration = new Duration(TimeSpan.FromSeconds(seconds)),
-                From = 1,
                 To = 0,
             };
 

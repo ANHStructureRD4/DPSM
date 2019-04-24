@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// A Converter that takes in a boolean and inverts it

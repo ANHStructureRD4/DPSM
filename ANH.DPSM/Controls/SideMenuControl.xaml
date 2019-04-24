@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="ANH.DPSM.SideMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ANH.DPSM"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="300"
+             >
+    
+    <UserControl.Template>
+        <ControlTemplate TargetType="UserControl">
+            <!-- Main background -->
+            <Border>
+                <!-- Content -->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <!-- The user content -->
+                    <Border Grid.Row="0" Background="Transparent">
+                        <ContentPresenter />
+                    </Border>
+
+                    <Grid Grid.Row="2" Height="50"  Background="{StaticResource ForegroundVeryDarkBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Add buttons -->
+                        <Button Grid.Column="0"
+                                Foreground="{StaticResource ForegroundLightBrush}"
+                                Command="{Binding EquipmentManagementViewModel.OpenCommand,
+                                                  Source={x:Static local:ViewModelLocator.Instance}}"
+                                Style="{StaticResource IconButton}"
+                                Content="{StaticResource FontAwesomeEllipsisIcon}"></Button>
+                        <!-- Settings button -->
+                        <Button Grid.Column="2" 
+                                Foreground="{StaticResource WordDarkBlueBrush}"
+                                Command="{Binding EquipmentManagementViewModel.OpenCommand,
+                                                  Source={x:Static local:ViewModelLocator.Instance}}"
+                                Style="{StaticResource IconButton}" 
+                                Content="{StaticResource FontAwesomeCogIcon}"></Button>
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </ControlTemplate>
+
+    </UserControl.Template>
+</UserControl>

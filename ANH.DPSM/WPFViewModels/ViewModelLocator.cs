@@ -1,6 +1,7 @@
 ﻿using ANH.Core;
+using static ANH.DPSM.DI;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Locates view models from the IoC for use in binding in Xaml files
@@ -17,17 +18,17 @@ namespace ANH.GCS
         /// <summary>
         /// The application view model
         /// </summary>
-        public static ApplicationViewModel ApplicationViewModel => IoC.Application;
+        public static ApplicationViewModel ApplicationViewModel => ViewModelApplication;
 
         /// <summary>
         /// The settings view model
         /// </summary>
-        public static SettingsViewModel SettingsViewModel => IoC.Settings;
+        public static SettingsViewModel SettingsViewModel => ViewModelSettings;
 
         /// <summary>
         /// The analysis view model
         /// </summary>
-        public static AnalysisViewModel AnalysisViewModel => IoC.Analysis;
+        public static EquipmentManagementViewModel EquipmentManagementViewModel => ViewModelEquipmentManagement;
 
         #endregion
 

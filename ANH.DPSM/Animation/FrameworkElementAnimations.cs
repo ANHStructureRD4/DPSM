@@ -2,8 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
+using static ANH.Core.CoreDI;
 
-namespace ANH.GCS
+namespace ANH.DPSM
 {
     /// <summary>
     /// Helpers to animate framework elements in specific ways
@@ -110,7 +111,8 @@ namespace ANH.GCS
             await Task.Delay((int)(seconds * 1000));
 
             // Make element invisible
-            element.Visibility = Visibility.Hidden;
+            if (element.Opacity == 0)
+                element.Visibility = Visibility.Hidden;
         }
 
         #endregion
@@ -200,7 +202,7 @@ namespace ANH.GCS
             element.Unloaded += (s, e) => unloaded = true;
 
             // Run a loop off the caller thread
-            Task.Run(async () =>
+            TaskManager.Run(async () =>
             {
                 // While the element is still available, recheck the size
                 // after every loop in case the container was resized

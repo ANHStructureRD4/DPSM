@@ -1,4 +1,4 @@
-﻿namespace ANH.GCS
+﻿namespace ANH.DPSM
 {
 	/// <summary>
 	/// The direction an animation silides in (the slide out direction is reversed)

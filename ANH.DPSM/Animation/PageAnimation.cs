@@ -1,4 +1,4 @@
-﻿namespace ANH.GCS
+﻿namespace ANH.DPSM
 {
     /// <summary>
     /// Style of page animations for apprearing/disappearing
