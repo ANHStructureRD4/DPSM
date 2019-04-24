@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANH.DPSM", "ANH.GCS\ANH.DPSM.csproj", "{0015EE2A-44D0-4E12-AE57-145B2E7C3B9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANH.DPSM", "ANH.DPSM\ANH.DPSM.csproj", "{0015EE2A-44D0-4E12-AE57-145B2E7C3B9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANH.Core", "ANH.Core\ANH.Core.csproj", "{29C67F46-F35E-4A4A-822D-660DF04551A5}"
 EndProject
